@@ -1,0 +1,14 @@
+{
+  "name": "testtask",
+  "version": "1.0.0",
+  "description": "This job was made for test task",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Handy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

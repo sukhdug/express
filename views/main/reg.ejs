@@ -1,0 +1,31 @@
+<% include ../layout %>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1><%= title %></h1>
+        <p><%= message %></p>
+        <form method="POST" action="/reg">
+          <div class="form-group">
+            <label for="password">Input your full name</label>
+            <input type="text" name="full_name" class="form-control" placeholder="Enter password full name">
+          </div>
+          <div class="form-group">
+            <label for="email">Input your email</label>
+            <input type="email" name="email" class="form-control" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="password">Input your password</label>
+            <input type="password" name="password" class="form-control" placeholder="Enter password">
+          </div>
+          <div class="form-group">
+            <label for="password">Repeat your password</label>
+            <input type="password" name="repeat_password" class="form-control" placeholder="Enter password repeat">
+          </div>
+          <button type="submit" name="submit" class="btn btn-primary">Registration</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

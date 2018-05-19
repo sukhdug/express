@@ -1,7 +1,12 @@
 <% include ../layout %>
 <body>
-  <h1><%= title %></h1>
-  <p><%= message %></p>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <a href="/auth"><button type="submit" class="btn btn-primary">Вход</button></a>
+        <a href="/reg"><button type="submit" class="btn btn-primary">Регистрация</button></a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -1,8 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var morgan = require('morgan');
 var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
@@ -18,7 +17,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 
 app.use('/', urlencodedParser, indexRouter);
 

@@ -6,7 +6,7 @@ app.get('/', main.home);
 
 app.get('/reg', main.registration);
 
-app.post('/reg', main.registration);
+app.post('/reg', main.registrationResult);
 
 app.get('/auth', main.auth);
 

@@ -10,4 +10,6 @@ app.post('/reg', main.registrationResult);
 
 app.get('/auth', main.auth);
 
+app.post('/auth', main.authResult);
+
 module.exports = app

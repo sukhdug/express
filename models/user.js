@@ -1,6 +1,6 @@
 var pbkdf2 = require('pbkdf2');
 var User = require('../entities/user');
-var mongoose = require('../config/database');
+var mongoose = require('mongoose');
 
 var create = function(data) {
   var errors = validation(data);
@@ -23,6 +23,26 @@ var create = function(data) {
   return 1;
 }
 
+var findByName = function(data) {
+  User.findOne({
+    fullName: data
+  }).exec(function(err, user) {
+    if (err) throw err;
+    console.log(user);
+    return user;
+  });
+}
+
+var findByEmail = function(data) {
+  User.findOne({
+      email: data.email
+  }).exec(function(err, user) {
+    if (err) throw err;
+    console.log(user);
+    return user;
+  });
+}
+
 function validation(data) {
   var regName = /^[a-zA-Zа-яА-Я\s-]+$/i;
   if (!regName.test(data.fullName)) {
@@ -35,5 +55,7 @@ function validation(data) {
 }
 
 module.exports = {
-  create: create
+  create: create,
+  findByEmail: findByEmail,
+  findByName: findByName
 };

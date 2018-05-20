@@ -33,7 +33,7 @@ exports.registrationResult = function (req, res, next) {
     }
     var result = user.create(data);
     if (result === 1) {
-      res.send('Success');
+      res.redirect('/');
     } else {
       res.render('main/reg', {
         title: "Registration",
@@ -51,6 +51,24 @@ exports.registrationResult = function (req, res, next) {
 exports.auth = function (req, res, next) {
   res.render('main/auth', {
     title: "Authorization",
-    message: "It is authorization page"
+    message: "It is authorization page",
+    email: ''
   });
+}
+
+exports.authResult = function (req, res, next) {
+  res.render('main/auth', {
+    title: "Authorization",
+    message: "It is authorization page",
+    email: req.body.email
+  });
+  if (req.body) {
+    var data = {
+      email: req.body.email,
+      password: req.body.password
+    }
+    var result = user.findByEmail(data);
+    console.log(result);
+    console.log(req.body);
+  }
 }

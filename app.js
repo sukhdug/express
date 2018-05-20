@@ -5,6 +5,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
+var taskRouter = require('./routes/tasks');
 
 var app = express();
 
@@ -20,6 +21,7 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 app.use(morgan('dev'));
 
 app.use('/', urlencodedParser, indexRouter);
+app.use('/tasks', urlencodedParser, taskRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

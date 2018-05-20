@@ -1,0 +1,20 @@
+<% include ../layout %>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1><%= title %></h1>
+        <p><%= message %></p>
+        <hr>
+        <% tasks.forEach( function (task) { %>
+          <h1><%= task.name %></h1>
+          <p><b>Description</b></p>
+          <p><%= task.description %></p>
+          <p>Importance: <%= task.importance %></p>
+          <p>Deadline: <%= task.deadline %></p>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

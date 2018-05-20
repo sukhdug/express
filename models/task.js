@@ -31,6 +31,16 @@ var findAll = function(callback) {
   });
 }
 
+var findByImportance = function(importance, callback) {
+  Task.find({
+    importance: importance
+  }).exec(function(err, tasks) {
+    if (err) throw err;
+    console.log(tasks);
+    callback(tasks);
+  });
+}
+
 function validation(data) {
   var onlySpace = /^\s+$/i;
   var valDate = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i;
@@ -45,5 +55,6 @@ function validation(data) {
 
 module.exports = {
   create: create,
-  findAll: findAll
+  findAll: findAll,
+  findByImportance: findByImportance
 }

@@ -12,4 +12,6 @@ app.get('/auth', main.auth);
 
 app.post('/auth', main.authResult);
 
+app.get('/logout', main.logout);
+
 module.exports = app

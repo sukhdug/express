@@ -33,13 +33,28 @@ var findByName = function(data) {
   });
 }
 
-var findByEmail = function(data) {
+var findByEmailAndPassword = function(data, callback) {
+  var password = pbkdf2.pbkdf2Sync(data.password, 'salt', 1000, 32, 'sha512');
   User.findOne({
-      email: data.email
+      email: data.email,
+      password: password
   }).exec(function(err, user) {
-    if (err) throw err;
+    if (err) {
+      throw err;
+      callback(new Error("Server error"));
+    }
     console.log(user);
-    return user;
+    if (user !== null) {
+      var data = {
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role
+      }
+      callback(null, data);
+    } else {
+      callback(new Error("User not found"));
+    }
   });
 }
 
@@ -56,6 +71,6 @@ function validation(data) {
 
 module.exports = {
   create: create,
-  findByEmail: findByEmail,
+  findByEmailAndPassword: findByEmailAndPassword,
   findByName: findByName
 };

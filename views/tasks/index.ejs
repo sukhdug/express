@@ -5,6 +5,17 @@
       <div class="col">
         <h1><%= title %></h1>
         <p><%= message %></p>
+        <form method="GET" action="/tasks">
+          <div class="form-group">
+            <label for="importance">Importance</label>
+            <select class="form-control" name="importance">
+              <option value="normal">normal</option>
+              <option value="important">important</option>
+              <option value="very_important">very important</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Apply</button>
+        </form>
         <hr>
         <% tasks.forEach( function (task) { %>
           <h1><%= task.name %></h1>

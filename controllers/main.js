@@ -1,10 +1,14 @@
 var user = require('../models/user');
 
 exports.home = function (req, res, next) {
-  res.render('main/home', {
-    title: "It is title",
-    message: "It is message"
-  });
+  if (req.session.authUser) {
+    res.send('Hello, ' + req.session.authUser.fullName + '<a href="/logout">Log out</a>');
+  } else {
+    res.render('main/home', {
+      title: "It is title",
+      message: "It is message"
+    });
+  }
 }
 
 exports.registration = function (req, res, next) {
@@ -57,18 +61,30 @@ exports.auth = function (req, res, next) {
 }
 
 exports.authResult = function (req, res, next) {
-  res.render('main/auth', {
-    title: "Authorization",
-    message: "It is authorization page",
-    email: req.body.email
-  });
   if (req.body) {
     var data = {
       email: req.body.email,
       password: req.body.password
     }
-    var result = user.findByEmail(data);
-    console.log(result);
+    user.findByEmailAndPassword(data, function (err, user) {
+      if (err) {
+        res.render('main/auth', {
+          title: "Authorization",
+          message: "Error! Maybe, email or password is wrong",
+          email: req.body.email
+        });
+      } else {
+        console.log(user);
+        req.session.authUser = user;
+        console.log(req.session.authUser);
+        res.send('You authorizated');
+      }
+    });
     console.log(req.body);
   }
+}
+
+exports.logout = function (req, res, next) {
+  req.session.destroy();
+  res.redirect('/');
 }

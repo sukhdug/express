@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var taskRouter = require('./routes/tasks');
@@ -15,6 +16,11 @@ app.set('view engine', 'ejs');
 
 // Connect static files (js, css, img)
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(session({
+  resave: false,
+  saveUninitialized: false,
+  secret: 'auth'
+}));
 
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 

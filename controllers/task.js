@@ -1,14 +1,34 @@
 var task = require('../models/task');
 var user = require('../models/user');
 
+function isEmpty(obj) {
+  for (var key in obj) {
+    return false;
+  }
+  return true;
+}
+
 exports.index = function(req, res, next) {
-  task.findAll( function (tasks) {
-    res.render('tasks/index', {
-      title: "All tasks",
-      message: "Here shown all tasks",
-      tasks: tasks
+  req.session.message = 'Hello World';
+  console.log(req.session.message);
+  if (isEmpty(req.query)) {
+    task.findAll( function (tasks) {
+      res.render('tasks/index', {
+        title: "All tasks",
+        message: "Here shown all tasks",
+        tasks: tasks
+      });
     });
-  });
+  } else if (req.query) {
+    var importance = req.query.importance;
+    task.findByImportance(importance, function (tasks) {
+      res.render('tasks/index', {
+        title: "All tasks",
+        message: "Here shown all tasks",
+        tasks: tasks
+      });
+    });
+  }
 }
 
 exports.create = function(req, res, next) {

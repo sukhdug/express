@@ -1,13 +1,20 @@
 var user = require('../models/user');
 
+function isEmpty(obj) {
+  for (var key in obj) {
+    return false;
+  }
+  return true;
+}
+
 exports.home = function (req, res, next) {
-  if (req.session.authUser) {
-    res.send('Hello, ' + req.session.authUser.fullName + '<a href="/logout">Log out</a>');
-  } else {
+  if (isEmpty(req.session.authUser)) {
     res.render('main/home', {
       title: "It is title",
       message: "It is message"
     });
+  } else if (req.session.authUser) {
+    res.redirect('/tasks');
   }
 }
 
@@ -77,7 +84,7 @@ exports.authResult = function (req, res, next) {
         console.log(user);
         req.session.authUser = user;
         console.log(req.session.authUser);
-        res.send('You authorizated');
+        res.send('You authorized<br><a href="/">Main page</a>');
       }
     });
     console.log(req.body);

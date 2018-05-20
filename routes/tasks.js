@@ -4,12 +4,14 @@ var task = require('../controllers/task');
 
 app.get('/', task.index);
 
+app.get('/view/:id', task.view);
+
 app.get('/create', task.create);
 
 app.post('/create', task.createResult);
 
-app.get('/update', task.update);
+app.get('/update/:id', task.update);
 
-app.post('/update', task.updateResult);
+app.post('/update/:id', task.updateResult);
 
 module.exports = app

@@ -23,13 +23,11 @@ var create = function(data) {
   return 1;
 }
 
-var findByName = function(data) {
-  User.findOne({
-    fullName: data
-  }).exec(function(err, user) {
+var findAll = function(callback) {
+  User.find({}).exec(function(err, users) {
     if (err) throw err;
-    console.log(user);
-    return user;
+    console.log(users);
+    callback(users);
   });
 }
 
@@ -71,6 +69,6 @@ function validation(data) {
 
 module.exports = {
   create: create,
-  findByEmailAndPassword: findByEmailAndPassword,
-  findByName: findByName
+  findAll: findAll,
+  findByEmailAndPassword: findByEmailAndPassword
 };

@@ -13,11 +13,16 @@ var taskSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  status: {
+    type: String,
+    required: true
+  },
   deadline: Date,
   readyDate: Date,
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   created: {
     type: Date,

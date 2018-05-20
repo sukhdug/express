@@ -3,6 +3,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
+        <a href="/logout" style="text-align: center">Logout</a>
         <h1><%= title %></h1>
         <p><%= message %></p>
         <form method="GET" action="/tasks">
@@ -14,11 +15,20 @@
               <option value="very_important">very important</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="importance">Status</label>
+            <select class="form-control" name="status">
+              <option value="open">open</option>
+              <option value="closed">closed</option>
+            </select>
+          </div>
           <button type="submit" class="btn btn-primary">Apply</button>
+          <a href="/tasks/create"><button type="button" class="btn btn-default">Create task</button></a>
         </form>
         <hr>
         <% tasks.forEach( function (task) { %>
-          <h1><%= task.name %></h1>
+          <h1><a href="/tasks/view/<%= task._id %>"><%= task.name %></a></h1>
+          <p><b>Author:</b> <%= task.author %></p>
           <p><b>Description</b></p>
           <p><%= task.description %></p>
           <p>Importance: <%= task.importance %></p>

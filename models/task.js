@@ -4,15 +4,15 @@ var mongoose = require('mongoose');
 var create = function(data) {
   var errors = validation(data);
   if (errors === 0) {
-    console.log("Here 1");
     var task = new Task({
       _id: new mongoose.Types.ObjectId(),
       name: data.name,
+      author: data.author._id,
       description: data.description,
       importance: data.importance,
+      status: data.status,
       deadline: data.deadline
     });
-    console.log("Here 2");
     task.save(function(err) {
       if (err) throw err;
       console.log('task successfully saved.');
@@ -23,8 +23,30 @@ var create = function(data) {
   return 1;
 }
 
+var findTaskById = function(id, callback) {
+  Task.findById(id, function(err, task) {
+    if (err) throw err;
+    console.log(task);
+    callback(task);
+  });
+}
+
 var findAll = function(callback) {
-  Task.find({}).exec(function(err, tasks) {
+  Task.find({})
+  .populate('author', ['fullName'])
+  .exec(function(err, tasks) {
+    if (err) throw err;
+    console.log(tasks);
+    callback(tasks);
+  });
+}
+
+var findAllOfUser = function(userId, callback) {
+  Task.find({
+    author: userId
+  })
+  .populate('author', ['fullName'])
+  .exec(function(err, tasks) {
     if (err) throw err;
     console.log(tasks);
     callback(tasks);
@@ -34,7 +56,22 @@ var findAll = function(callback) {
 var findByImportance = function(importance, callback) {
   Task.find({
     importance: importance
-  }).exec(function(err, tasks) {
+  })
+  .populate('author', ['fullName'])
+  .exec(function(err, tasks) {
+    if (err) throw err;
+    console.log(tasks);
+    callback(tasks);
+  });
+}
+
+var findByImportanceOfUser = function(userId, importance, callback) {
+  Task.find({
+    author: userId,
+    importance: importance
+  })
+  .populate('author', ['fullName'])
+  .exec(function(err, tasks) {
     if (err) throw err;
     console.log(tasks);
     callback(tasks);
@@ -55,6 +92,9 @@ function validation(data) {
 
 module.exports = {
   create: create,
+  findTaskById: findTaskById,
   findAll: findAll,
-  findByImportance: findByImportance
+  findAllOfUser: findAllOfUser,
+  findByImportance: findByImportance,
+  findByImportanceOfUser: findByImportanceOfUser
 }

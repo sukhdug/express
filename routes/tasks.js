@@ -12,6 +12,6 @@ app.post('/create', task.createResult);
 
 app.get('/update/:id', task.update);
 
-app.post('/update/:id', task.updateResult);
+app.put('/update/:id', task.updateResult);
 
 module.exports = app

@@ -18,7 +18,6 @@ var taskSchema = mongoose.Schema({
     required: true
   },
   deadline: Date,
-  readyDate: Date,
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -27,7 +26,8 @@ var taskSchema = mongoose.Schema({
   created: {
     type: Date,
     default: Date.now
-  }
+  },
+  closed: Date
 });
 
 var Task = mongoose.model('Task', taskSchema);

@@ -26,14 +26,13 @@
           <a href="/tasks/create"><button type="button" class="btn btn-default">Create task</button></a>
         </form>
         <hr>
-        <% tasks.forEach( function (task) { %>
-          <h1><a href="/tasks/view/<%= task._id %>"><%= task.name %></a></h1>
-          <p><b>Author:</b> <%= task.author %></p>
+        <% for (var i=0; i < tasks.length; i++) { %>
+          <h1><a href="/tasks/view/<%= tasks[i]._id %>"><%= tasks[i].name %></a></h1>
           <p><b>Description</b></p>
-          <p><%= task.description %></p>
-          <p>Importance: <%= task.importance %></p>
-          <p>Deadline: <%= task.deadline %></p>
-        <% }) %>
+          <p><%= tasks[i].description %></p>
+          <p><b>Importance:</b> <%= tasks[i].importance %></p>
+          <p><b>Deadline:</b> <%= tasks[i].deadline %></p>
+        <% } %>
       </div>
     </div>
   </div>

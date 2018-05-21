@@ -56,13 +56,35 @@ var findByEmailAndPassword = function(data, callback) {
   });
 }
 
+var checkExistEmail = function (email, callback) {
+  User.findOne({
+    email: email
+  }).exec(function(err, user) {
+    if (err) throw err;
+    if (user == null) {
+      callback('no');
+    } else {
+      callback('yes');
+    }
+  });
+}
+
 function validation(data) {
   var regName = /^[a-zA-Zа-яА-Я\s-]+$/i;
+  if (data.fullName.length == 0) {
+    return "Please, input your full name!";
+  }
+  if (data.email.length == 0) {
+    return "Please, input your email!";
+  }
+  if (data.password.length == 0) {
+    return "Please, input your password";
+  }
   if (!regName.test(data.fullName)) {
     return "Incorrect name. Please input only letters.";
   }
-  if (data.password.length < 6) {
-    return "Please, create a password greater than 6 characters";
+  if (data.password.length < 5) {
+    return "Please, create a password greater than 5 characters";
   }
   return 0;
 }

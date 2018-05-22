@@ -2,33 +2,21 @@ var pbkdf2 = require('pbkdf2');
 var User = require('../entities/user');
 var mongoose = require('mongoose');
 
-var create = function(data) {
-  var errors = validation(data);
-  if (errors === 0) {
-    var password = pbkdf2.pbkdf2Sync(data.password, 'salt', 1000, 32, 'sha512');
-    var user = new User({
-      _id: new mongoose.Types.ObjectId(),
-      fullName: data.fullName,
-      email: data.email,
-      password: password,
-      role: data.admin ? "admin" : "user"
-    });
-    user.save(function(err, user) {
-      if (err) throw err;
-      console.log('user successfully saved.');
-      console.log(user);
-    });
-  } else {
-    return errors;
-  }
-  return 1;
-}
-
-var findAll = function(callback) {
-  User.find({}).exec(function(err, users) {
-    if (err) throw err;
-    console.log(users);
-    callback(users);
+var create = function(data, callback) {
+  var password = pbkdf2.pbkdf2Sync(data.password, 'salt', 1000, 32, 'sha512');
+  var user = new User({
+    _id: new mongoose.Types.ObjectId(),
+    fullName: data.fullName,
+    email: data.email,
+    password: password,
+    role: data.admin ? "admin" : "user"
+  });
+  user.save(function(err, user) {
+    if (err) {
+      callback(new Error("Server error"));
+    }
+    console.log('user successfully saved.');
+    callback(null, user);
   });
 }
 
@@ -57,20 +45,7 @@ var findByEmailAndPassword = function(data, callback) {
   });
 }
 
-var checkExistEmail = function (email, callback) {
-  User.findOne({
-    email: email
-  }).exec(function(err, user) {
-    if (err) throw err;
-    if (user == null) {
-      callback('no');
-    } else {
-      callback('yes');
-    }
-  });
-}
-
-function validation(data) {
+var validation = function (data) {
   var regName = /^[a-zA-Zа-яА-Я\s-]+$/i;
   if (data.fullName.length == 0) {
     return "Please, input your full name!";
@@ -98,6 +73,6 @@ function validation(data) {
 
 module.exports = {
   create: create,
-  findAll: findAll,
-  findByEmailAndPassword: findByEmailAndPassword
+  findByEmailAndPassword: findByEmailAndPassword,
+  validation: validation
 };

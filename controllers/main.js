@@ -33,11 +33,13 @@ exports.registrationPost = function (req, res) {
     repeatPassword: req.body.repeatPassword,
     admin: req.body.admin ? true : false
   }
-  var result = user.create(data);
-  if (result === 1) {
-    res.send('You successfully registered.<br>' +
-      'Please, <a href="/auth">login</a> with data:<br>' +
-      'email: ' + data.email + '<br>' + 'password: ' + data.password);
+  var errors = user.validation(data);
+  if (errors === 0) {
+    user.create(data, function(err, user) {
+      req.session.authUser = user;
+      req.flash('success', "You are authorized");
+      res.redirect(301, '/');
+    });
   } else {
     req.flash('error', result);
     res.render('main/reg', {
@@ -71,7 +73,6 @@ exports.authPost = function (req, res) {
           email: req.body.email
         });
       } else {
-        console.log(user);
         req.session.authUser = user;
         req.flash('success', "You are authorized");
         res.redirect(301, '/');

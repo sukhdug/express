@@ -6,9 +6,7 @@
       <div class="col">
         <h1><%= title %></h1>
         <% if (flashSuccess.length > 0) { %>
-          <div class="alert alert-primary" role="alert">
-            <p><%= flashSuccess %></p>
-          </div>
+          <div class="alert alert-primary" role="alert"><%= flashSuccess %></div>
         <% } %>
         <hr>
         <h2><%= task.name %></h2>

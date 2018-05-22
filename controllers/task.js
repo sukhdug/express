@@ -94,12 +94,18 @@ exports.createPost = function(req, res) {
       status: 'open',
       deadline: req.body.deadline
     }
-    var result = task.create(data);
-    if (result === 1) {
-      res.send('Task successfully created<br><a href="/tasks">' +
-              'Back to list of tasks</a>');
+    var errors = task.validation(data);
+    if (errors == 0) {
+      task.create(data, function(err, task) {
+        if (err) {
+          res.send("500 Server error<br><a href='/tasks'>Back to tasks list</a>");
+        } else {
+          req.flash('success', 'Task successfully created');
+          res.redirect(301, '/tasks/view/' + task._id);
+        }
+      });
     } else {
-      req.flash('error', result);
+      req.flash('error', errors);
       res.render('tasks/create', {
         title: "Create task",
         flashError: req.flash('error'),

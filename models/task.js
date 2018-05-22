@@ -1,26 +1,23 @@
 var mongoose = require('mongoose');
 var Task = require('../entities/task');
 
-var create = function(data) {
-  var errors = validation(data);
-  if (errors === 0) {
-    var task = new Task({
-      _id: new mongoose.Types.ObjectId(),
-      name: data.name,
-      author: data.author._id,
-      description: data.description,
-      importance: data.importance,
-      status: data.status,
-      deadline: data.deadline
-    });
-    task.save(function(err) {
-      if (err) throw err;
-      console.log('task successfully saved.');
-    });
-  } else {
-    return errors;
-  }
-  return 1;
+var create = function(data, callback) {
+  var task = new Task({
+    _id: new mongoose.Types.ObjectId(),
+    name: data.name,
+    author: data.author._id,
+    description: data.description,
+    importance: data.importance,
+    status: data.status,
+    deadline: data.deadline
+  });
+  task.save(function(err, task) {
+    if (err) {
+      callback(new Error("Server error"));
+    }
+    console.log('task successfully saved.');
+    callback(null, task);
+  });
 }
 
 var update = function(data) {
@@ -117,7 +114,7 @@ var findAllByParameters = function(parameters, page, callback) {
   });
 }
 
-function validation(data) {
+var validation = function (data) {
   var onlySpace = /^\s+$/i;
   var valDate = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i;
   if (data.name.length === 0) {
@@ -137,5 +134,6 @@ module.exports = {
   update: update,
   remove: remove,
   findTaskById: findTaskById,
-  findAllByParameters: findAllByParameters
+  findAllByParameters: findAllByParameters,
+  validation: validation
 }

@@ -15,6 +15,8 @@ app.get('/update/:id', middleware.isLoggedIn, task.updateGet);
 
 app.post('/update/:id', middleware.isLoggedIn, task.updatePost);
 
-app.delete('/delete/:id', middleware.isLoggedIn, task.delete);
+app.get('/delete/:id', middleware.isLoggedIn, task.deleteGet);
+
+app.post('/delete/:id', middleware.isLoggedIn, task.deletePost);
 
 module.exports = app

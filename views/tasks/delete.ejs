@@ -1,0 +1,16 @@
+<% include ../layout %>
+<body>
+  <a href="/logout" style="text-align: center">Logout</a>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1><%= title %></h1>
+        <p><%= message %></p>
+        <form method="POST" action="/tasks/delete/<%= id %>">
+          <button type="submit" class="btn btn-danger">Delete</button>
+          <a href="/tasks/view/<%= id %>"><button type="button" class="btn btn-primary">Back to task</button></a>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>

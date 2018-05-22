@@ -1,13 +1,12 @@
 <% include ../layout %>
 <body>
+  <a href="/logout" style="text-align: center">Logout</a>
   <div class="container">
     <div class="row">
       <div class="col">
         <h1><%= title %></h1>
         <% if (flashError.length > 0) { %>
-          <div class="alert alert-danger" role="alert">
-            <p><%= flashError %></p>
-          </div>
+          <div class="alert alert-danger" role="alert"><%= flashError %></div>
         <% } %>
         <form method="POST" action="/tasks/update/<%= id %>">
           <div class="form-group">

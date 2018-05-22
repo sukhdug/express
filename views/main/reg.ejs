@@ -5,9 +5,7 @@
       <div class="col">
         <h1><%= title %></h1>
         <% if (flashError.length > 0) { %>
-          <div class="alert alert-danger" role="alert">
-            <p><%= flashError %></p>
-          </div>
+          <div class="alert alert-danger" role="alert"><%= flashError %></div>
         <% } %>
         <form method="POST" action="/reg">
           <div class="form-group">

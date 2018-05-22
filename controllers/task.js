@@ -16,6 +16,11 @@ exports.index = function(req, res) {
     }
   } else if (req.query) {
     var data = {};
+    var page = 0;
+    if (req.query.page > 0) {
+      page = req.query.page;
+    }
+    console.log(page);
     if (req.session.authUser.role == 'user') {
       data.author = req.session.authUser._id;
     }
@@ -29,10 +34,10 @@ exports.index = function(req, res) {
       data.importance = req.query.importance;
       data.status = req.query.status;
     }
-    getTasksByParameters(data);
+    getTasksByParameters(data, page);
   }
-  function getTasksByParameters (data) {
-    task.findAllByParameters(data, function (tasks) {
+  function getTasksByParameters (data, page) {
+    task.findAllByParameters(data, page, function (tasks, pages) {
       res.render('tasks/index', {
         title: "Tasks",
         flashSuccess: req.flash('success'),
@@ -45,18 +50,23 @@ exports.index = function(req, res) {
 exports.view = function(req, res) {
   var id = req.params.id;
   task.findTaskById(id, function (task) {
-    var userPermission = (req.session.authUser._id == task.authorId &&
-      req.session.authUser.role == 'user');
-    var adminPermission = (req.session.authUser.role == 'admin');
-    if (userPermission || adminPermission) {
-      res.render('tasks/view', {
-        flashSuccess: req.flash('success'),
-        title: "Full information of task",
-        task: task
-      });
+    if (task == null) {
+      res.send('404! Sorry, task not found or deleted!<br>' +
+        '<a href="/tasks">Back to tasks list</a>');
     } else {
-      res.send('403! You don\'t have permission<br><a href="/tasks">' +
-              'Back to list of tasks</a>');
+      var userPermission = (req.session.authUser._id == task.authorId &&
+        req.session.authUser.role == 'user');
+      var adminPermission = (req.session.authUser.role == 'admin');
+      if (userPermission || adminPermission) {
+        res.render('tasks/view', {
+          flashSuccess: req.flash('success'),
+          title: "Full information of task",
+          task: task
+        });
+      } else {
+        res.send('403! You don\'t have permission<br><a href="/tasks">' +
+                'Back to list of tasks</a>');
+      }
     }
   });
 }
@@ -106,23 +116,28 @@ exports.createPost = function(req, res) {
 exports.updateGet = function(req, res) {
   var id = req.params.id;
   task.findTaskById(id, function (task) {
-    var userPermission = (req.session.authUser._id == task.authorId &&
-      req.session.authUser.role == 'user');
-    var adminPermission = (req.session.authUser.role == 'admin');
-    if (userPermission || adminPermission) {
-      res.render('tasks/update', {
-        title: "Update task",
-        message: "Input data of task",
-        id: id,
-        flashError: req.flash('error'),
-        name: task.name,
-        description: task.description,
-        importance: task.importance,
-        deadline: task.deadline
-      });
+    if (task == null) {
+      res.send('404! Sorry, task not found or deleted!<br>' +
+        '<a href="/tasks">Back to tasks list</a>');
     } else {
-      res.send('403! You don\'t have permission<br><a href="/tasks">' +
-              'Back to list of tasks</a>');
+      var userPermission = (req.session.authUser._id == task.authorId &&
+        req.session.authUser.role == 'user');
+      var adminPermission = (req.session.authUser.role == 'admin');
+      if (userPermission || adminPermission) {
+        res.render('tasks/update', {
+          title: "Update task",
+          message: "Input data of task",
+          id: id,
+          flashError: req.flash('error'),
+          name: task.name,
+          description: task.description,
+          importance: task.importance,
+          deadline: task.deadline
+        });
+      } else {
+        res.send('403! You don\'t have permission<br><a href="/tasks">' +
+                'Back to list of tasks</a>');
+      }
     }
   });
 }
@@ -157,7 +172,32 @@ exports.updatePost = function(req, res) {
   }
 }
 
-exports.delete = function(req, res) {
+exports.deleteGet = function(req, res) {
+  var id = req.params.id;
+  task.findTaskById(id, function (task) {
+    if (task == null) {
+      res.send('404! Sorry, task not found or deleted!<br>' +
+        '<a href="/tasks">Back to tasks list</a>');
+    } else {
+      var userPermission = (req.session.authUser._id == task.authorId &&
+        req.session.authUser.role == 'user');
+      var adminPermission = (req.session.authUser.role == 'admin');
+      if (userPermission || adminPermission) {
+        res.render('tasks/delete', {
+          title: "Delete task",
+          message: "Do you have delete task?",
+          id: id,
+          flashError: req.flash('error'),
+        });
+      } else {
+        res.send('403! You don\'t have permission<br><a href="/tasks">' +
+                'Back to list of tasks</a>');
+      }
+    }
+  });
+}
+
+exports.deletePost = function(req, res) {
   var id = req.params.id;
   task.remove(id, function(result) {
     res.send(result + "<br><a href='/tasks'>Back to tasks list</a>");

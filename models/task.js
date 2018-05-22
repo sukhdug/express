@@ -61,28 +61,34 @@ var findTaskById = function(id, callback) {
   .exec(function(err, task) {
     if (err) throw err;
     console.log(task);
-    var data = {
-      _id: task._id,
-      name: task.name,
-      description: task.description,
-      authorId: task.author._id,
-      author: task.author.fullName,
-      importance: task.importance,
-      status: task.status,
-      created: task.created.getFullYear() + '-' + task.created.getMonth()
-        + '-' + task.created.getDate(),
-      deadline: task.deadline != null ? task.deadline.getFullYear() + '-' +
-        task.deadline.getMonth() + '-' + task.deadline.getDate() : 'no',
-      closed: task.status == 'closed' ? task.closed.getFullYear() + '-' +
-      task.closed.getMonth() + '.' + task.closed.getDate() : 'no',
+    if (task == null) {
+      callback(null);
+    } else {
+      var data = {
+        _id: task._id,
+        name: task.name,
+        description: task.description,
+        authorId: task.author._id,
+        author: task.author.fullName,
+        importance: task.importance,
+        status: task.status,
+        created: task.created.getFullYear() + '-' + task.created.getMonth()
+          + '-' + task.created.getDate(),
+        deadline: task.deadline != null ? task.deadline.getFullYear() + '-' +
+          task.deadline.getMonth() + '-' + task.deadline.getDate() : 'no',
+        closed: task.status == 'closed' ? task.closed.getFullYear() + '-' +
+        task.closed.getMonth() + '.' + task.closed.getDate() : 'no',
+      }
+      callback(data);
     }
-    callback(data);
   });
 }
 
-var findAllByParameters = function(parameters, callback) {
+var findAllByParameters = function(parameters, page, callback) {
   Task.find(parameters)
   .populate('author', ['fullName'])
+  .limit(10)
+  .skip(10 * page)
   .sort([['created', -1]])
   .exec(function(err, tasks) {
     if (err) throw err;
@@ -104,7 +110,10 @@ var findAllByParameters = function(parameters, callback) {
           '-' + tasks[i].closed.getMonth() + '-' + tasks[i].closed.getDate() : 'no',
       }
     }
-    callback(data);
+    Task.count().exec(function(err, count) {
+      var pages = count / 10;
+      callback(data, pages);
+    });
   });
 }
 

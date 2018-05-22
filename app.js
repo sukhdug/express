@@ -34,6 +34,7 @@ app.use('/tasks', urlencodedParser, taskRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+  res.send('404! Page not found<br><a href="/">Main page</a>');
 });
 
 // error handler

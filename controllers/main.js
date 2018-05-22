@@ -41,7 +41,7 @@ exports.registrationPost = function (req, res) {
       res.redirect(301, '/');
     });
   } else {
-    req.flash('error', result);
+    req.flash('error', errors);
     res.render('main/reg', {
       title: "Registration",
       flashError: req.flash('error'),

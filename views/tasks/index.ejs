@@ -43,6 +43,9 @@
             <p><b>Closed:</b> <%= tasks[i].closed %></p>
           <% } %>
         <% } %>
+        <% if (tasks.length == 0) { %>
+          <p>You have no tasks. <a href="/tasks/create">Create task</a></p>
+        <% } %>
       </div>
     </div>
   </div>

@@ -4,6 +4,7 @@ var path = require('path');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var flash = require('connect-flash');
 
 var indexRouter = require('./routes/index');
 var taskRouter = require('./routes/tasks');
@@ -26,6 +27,7 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 
 app.use(morgan('dev'));
 
+app.use(flash());
 app.use('/', urlencodedParser, indexRouter);
 app.use('/tasks', urlencodedParser, taskRouter);
 

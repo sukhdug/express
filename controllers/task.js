@@ -35,7 +35,7 @@ exports.index = function(req, res) {
     task.findAllByParameters(data, function (tasks) {
       res.render('tasks/index', {
         title: "Tasks",
-        message: "Here shown all tasks",
+        flashSuccess: req.flash('success'),
         tasks: tasks
       });
     });
@@ -50,6 +50,7 @@ exports.view = function(req, res) {
     var adminPermission = (req.session.authUser.role == 'admin');
     if (userPermission || adminPermission) {
       res.render('tasks/view', {
+        flashSuccess: req.flash('success'),
         title: "Full information of task",
         task: task
       });
@@ -60,10 +61,11 @@ exports.view = function(req, res) {
   });
 }
 
-exports.create = function(req, res) {
+exports.createGet = function(req, res) {
   res.render('tasks/create', {
     title: "Create task",
     message: "Create task",
+    flashError: req.flash('error'),
     name: '',
     author: req.session.authUser.fullName,
     description: '',
@@ -72,7 +74,7 @@ exports.create = function(req, res) {
   });
 }
 
-exports.createResult = function(req, res) {
+exports.createPost = function(req, res) {
   if (req.body) {
     var data = {
       name: req.body.name,
@@ -87,9 +89,10 @@ exports.createResult = function(req, res) {
       res.send('Task successfully created<br><a href="/tasks">' +
               'Back to list of tasks</a>');
     } else {
+      req.flash('error', result);
       res.render('tasks/create', {
         title: "Create task",
-        message: result,
+        flashError: req.flash('error'),
         name: req.body.name,
         author: req.body.author,
         description: req.body.description,
@@ -100,7 +103,7 @@ exports.createResult = function(req, res) {
   }
 }
 
-exports.update = function(req, res) {
+exports.updateGet = function(req, res) {
   var id = req.params.id;
   task.findTaskById(id, function (task) {
     var userPermission = (req.session.authUser._id == task.authorId &&
@@ -110,7 +113,12 @@ exports.update = function(req, res) {
       res.render('tasks/update', {
         title: "Update task",
         message: "Input data of task",
-        task: task
+        id: id,
+        flashError: req.flash('error'),
+        name: task.name,
+        description: task.description,
+        importance: task.importance,
+        deadline: task.deadline
       });
     } else {
       res.send('403! You don\'t have permission<br><a href="/tasks">' +
@@ -119,10 +127,11 @@ exports.update = function(req, res) {
   });
 }
 
-exports.updateResult = function(req, res) {
+exports.updatePost = function(req, res) {
+  var id = req.params.id;
   if (req.body) {
     var data = {
-      id: req.params.id,
+      _id: req.params.id,
       name: req.body.name,
       description: req.body.description,
       importance: req.body.importance,
@@ -131,11 +140,14 @@ exports.updateResult = function(req, res) {
     }
     var result = task.update(data);
     if (result === 1) {
-      res.send('Success');
+      req.flash('success', 'Info of the task updated');
+      res.redirect(301, '/tasks/view/' + id);
     } else {
+      req.flash('error', result);
       res.render('tasks/update', {
-        title: "Update task",
-        message: result,
+        title: "Update of task",
+        flashError: req.flash('error'),
+        id: id,
         name: req.body.name,
         description: req.body.description,
         importance: req.body.importance,

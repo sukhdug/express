@@ -84,6 +84,12 @@ function validation(data) {
   if (!regName.test(data.fullName)) {
     return "Incorrect name. Please input only letters.";
   }
+  if (data.repeatPassword.length == 0) {
+    return "Repeat password is wrong";
+  }
+  if (data.password != data.repeatPassword) {
+    return "Repeat password is wrong";
+  }
   if (data.password.length < 5) {
     return "Please, create a password greater than 5 characters";
   }

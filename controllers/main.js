@@ -1,9 +1,9 @@
 var user = require('../models/user');
 var middleware = require('../config/middleware');
 
-exports.home = function (req, res) {
+exports.index = function (req, res) {
   if (middleware.isEmpty(req.session.authUser)) {
-    res.render('main/home', {
+    res.render('main/index', {
       title: "It is title",
       message: "It is message"
     });
@@ -12,51 +12,44 @@ exports.home = function (req, res) {
   }
 }
 
-exports.registration = function (req, res) {
+exports.registrationGet = function (req, res) {
   if (req.session.authUser) {
     res.redirect('/');
   } else if (middleware.isEmpty(req.session.authUser)) {
     res.render('main/reg', {
       title: "Registration",
-      message: "It is registration page",
+      flashError: req.flash('error'),
       fullName: '',
       email: ''
     });
   }
 }
 
-exports.registrationResult = function (req, res) {
-  if (req.body.password != req.body.repeatPassword) {
+exports.registrationPost = function (req, res) {
+  var data = {
+    fullName: req.body.fullName,
+    email: req.body.email,
+    password: req.body.password,
+    repeatPassword: req.body.repeatPassword,
+    admin: req.body.admin ? true : false
+  }
+  var result = user.create(data);
+  if (result === 1) {
+    res.send('You successfully registered.<br>' +
+      'Please, <a href="/auth">login</a> with data:<br>' +
+      'email: ' + data.email + '<br>' + 'password: ' + data.password);
+  } else {
+    req.flash('error', result);
     res.render('main/reg', {
       title: "Registration",
-      message: "Repeat password is wrong",
+      flashError: req.flash('error'),
       fullName: req.body.fullName,
       email: req.body.email
     });
-  } else {
-    var data = {
-      fullName: req.body.fullName,
-      email: req.body.email,
-      password: req.body.password,
-      admin: req.body.admin ? true : false
-    }
-    var result = user.create(data);
-    if (result === 1) {
-      res.send('You successfully registered.<br>' +
-        'Please, <a href="/auth">login</a> with data:<br>' +
-        'email: ' + data.email + '<br>' + 'password: ' + data.password);
-    } else {
-      res.render('main/reg', {
-        title: "Registration",
-        message: result,
-        fullName: req.body.fullName,
-        email: req.body.email
-      });
-    }
   }
 }
 
-exports.auth = function (req, res) {
+exports.authGet = function (req, res) {
   res.render('main/auth', {
     title: "Authorization",
     message: "It is authorization page",
@@ -64,7 +57,7 @@ exports.auth = function (req, res) {
   });
 }
 
-exports.authResult = function (req, res) {
+exports.authPost = function (req, res) {
   if (req.body) {
     var data = {
       email: req.body.email,
@@ -80,8 +73,8 @@ exports.authResult = function (req, res) {
       } else {
         console.log(user);
         req.session.authUser = user;
-        console.log(req.session.authUser);
-        res.send('You authorized<br><a href="/">Back to homepage</a>');
+        req.flash('success', "You are authorized");
+        res.redirect(301, '/');
       }
     });
   }

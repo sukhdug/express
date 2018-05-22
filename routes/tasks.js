@@ -7,13 +7,13 @@ app.get('/', middleware.isLoggedIn, task.index);
 
 app.get('/view/:id', middleware.isLoggedIn, task.view);
 
-app.get('/create', middleware.isLoggedIn, task.create);
+app.get('/create', middleware.isLoggedIn, task.createGet);
 
-app.post('/create', middleware.isLoggedIn, task.createResult);
+app.post('/create', middleware.isLoggedIn, task.createPost);
 
-app.get('/update/:id', middleware.isLoggedIn, task.update);
+app.get('/update/:id', middleware.isLoggedIn, task.updateGet);
 
-app.put('/update/:id', middleware.isLoggedIn, task.updateResult);
+app.post('/update/:id', middleware.isLoggedIn, task.updatePost);
 
 app.delete('/delete/:id', middleware.isLoggedIn, task.delete);
 

@@ -26,9 +26,8 @@ var create = function(data) {
 var update = function(data) {
   var errors = validation(data);
   if (errors === 0) {
-    var id = data.id;
-    console.log("error here 1");
     var data = {
+      _id: data._id,
       name: data.name,
       description: data.description,
       importance: data.importance,
@@ -36,7 +35,8 @@ var update = function(data) {
       status: data.closed ? "closed" : "open",
       closed: data.closed ? new Date() : null
     }
-    Task.update({ _id: id }, data, function(err, task) {
+    console.log(data._id);
+    Task.update({ _id: data._id }, data, function(err, task) {
       if (err) throw err;
       console.log(task);
     });
@@ -73,8 +73,8 @@ var findTaskById = function(id, callback) {
         + '-' + task.created.getDate(),
       deadline: task.deadline != null ? task.deadline.getFullYear() + '-' +
         task.deadline.getMonth() + '-' + task.deadline.getDate() : 'no',
-      closed: task.status == 'closed' ? task.closed.getDate() + '.' +
-      task.closed.getMonth() + '.' + task.closed.getFullYear() : 'no',
+      closed: task.status == 'closed' ? task.closed.getFullYear() + '-' +
+      task.closed.getMonth() + '.' + task.closed.getDate() : 'no',
     }
     callback(data);
   });
@@ -112,7 +112,7 @@ function validation(data) {
   var onlySpace = /^\s+$/i;
   var valDate = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i;
   if (data.name.length === 0) {
-    return "Please, input task name";
+    return "Please, input name of task";
   }
   if (onlySpace.test(data.name) || onlySpace.test(data.description)) {
     return "Incorrect name or description of task. Please check!";

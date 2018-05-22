@@ -7,15 +7,21 @@
         <h1><%= title %></h1>
         <hr>
         <h2><%= task.name %></h2>
-        <p><b>Author:</b> <%= author.fullName %></p>
+        <p><b>Author:</b> <%= task.author %></p>
         <p><b>Description:</b> <%= task.description %></p>
         <p><b>Importance:</b> <%= task.importance %></p>
         <p><b>Status:</b> <%= task.status %></p>
-        <p><b>Created:</b> <%= created %></p>
-        <p><b>Deadline:</b> <%= deadline %></p>
-        <p><b>Closed:</b> <%= closed %></p>
+        <p><b>Created:</b> <%= task.created %></p>
+        <p><b>Deadline:</b> <%= task.deadline %></p>
+        <% if (task.status == 'closed') { %>
+          <p><b>Closed:</b> <%= task.closed %></p>
+        <% } %>
         <p><a href="/tasks/update/<%= task._id %>" type="button" class="btn btn-default">Edit</button></a>
-          <a href="/tasks/delete/<%= task._id %>" type="button" class="btn btn-danger">Delete</a></p>
+          <form method="delete" action="/tasks/delete/<%= task._id %>">
+            <div class="form-group">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+          </form>
       </div>
     </div>
   </div>

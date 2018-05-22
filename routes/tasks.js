@@ -1,17 +1,20 @@
 var express = require('express');
-var app = express();
 var task = require('../controllers/task');
+var middleware = require('../config/middleware');
+var app = express();
 
-app.get('/', task.index);
+app.get('/', middleware.isLoggedIn, task.index);
 
-app.get('/view/:id', task.view);
+app.get('/view/:id', middleware.isLoggedIn, task.view);
 
-app.get('/create', task.create);
+app.get('/create', middleware.isLoggedIn, task.create);
 
-app.post('/create', task.createResult);
+app.post('/create', middleware.isLoggedIn, task.createResult);
 
-app.get('/update/:id', task.update);
+app.get('/update/:id', middleware.isLoggedIn, task.update);
 
-app.put('/update/:id', task.updateResult);
+app.put('/update/:id', middleware.isLoggedIn, task.updateResult);
+
+app.delete('/delete/:id', middleware.isLoggedIn, task.delete);
 
 module.exports = app

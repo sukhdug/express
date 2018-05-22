@@ -1,5 +1,5 @@
-var Task = require('../entities/task');
 var mongoose = require('mongoose');
+var Task = require('../entities/task');
 
 var create = function(data) {
   var errors = validation(data);
@@ -46,6 +46,13 @@ var update = function(data) {
   return 1;
 }
 
+var remove = function(id, callback) {
+  Task.findOneAndRemove({_id: id}, function (err) {
+    if (err) throw err;
+    callback('Task deleted');
+  });
+}
+
 var findTaskById = function(id, callback) {
   Task.findOne({
     _id: id
@@ -54,27 +61,50 @@ var findTaskById = function(id, callback) {
   .exec(function(err, task) {
     if (err) throw err;
     console.log(task);
-    callback(task);
-  });
-}
-
-var findAll = function(callback) {
-  Task.find({})
-  .populate('author', ['fullName'])
-  .exec(function(err, tasks) {
-    if (err) throw err;
-    console.log(tasks);
-    callback(tasks);
+    var data = {
+      _id: task._id,
+      name: task.name,
+      description: task.description,
+      authorId: task.author._id,
+      author: task.author.fullName,
+      importance: task.importance,
+      status: task.status,
+      created: task.created.getFullYear() + '-' + task.created.getMonth()
+        + '-' + task.created.getDate(),
+      deadline: task.deadline != null ? task.deadline.getFullYear() + '-' +
+        task.deadline.getMonth() + '-' + task.deadline.getDate() : 'no',
+      closed: task.status == 'closed' ? task.closed.getDate() + '.' +
+      task.closed.getMonth() + '.' + task.closed.getFullYear() : 'no',
+    }
+    callback(data);
   });
 }
 
 var findAllByParameters = function(parameters, callback) {
   Task.find(parameters)
   .populate('author', ['fullName'])
+  .sort([['created', -1]])
   .exec(function(err, tasks) {
     if (err) throw err;
     console.log(tasks);
-    callback(tasks);
+    var data = [];
+    for (let i = 0; i < tasks.length; i++) {
+      data[i] = {
+        _id: tasks[i]._id,
+        name: tasks[i].name,
+        description: tasks[i].description,
+        author: tasks[i].author.fullName,
+        importance: tasks[i].importance,
+        status: tasks[i].status,
+        created: tasks[i].created.getFullYear() + '-' + tasks[i].created.getMonth() +
+          '-' + tasks[i].created.getDate(),
+        deadline: tasks[i].deadline != null ? tasks[i].deadline.getFullYear() +
+          '-' + tasks[i].deadline.getMonth() + '-' + tasks[i].deadline.getDate() : 'no',
+        closed: tasks[i].status == 'closed' ? tasks[i].closed.getFullYear() +
+          '-' + tasks[i].closed.getMonth() + '-' + tasks[i].closed.getDate() : 'no',
+      }
+    }
+    callback(data);
   });
 }
 
@@ -96,7 +126,7 @@ function validation(data) {
 module.exports = {
   create: create,
   update: update,
+  remove: remove,
   findTaskById: findTaskById,
-  findAll: findAll,
   findAllByParameters: findAllByParameters
 }

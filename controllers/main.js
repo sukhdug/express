@@ -1,14 +1,8 @@
 var user = require('../models/user');
-
-function isEmpty(obj) {
-  for (var key in obj) {
-    return false;
-  }
-  return true;
-}
+var middleware = require('../config/middleware');
 
 exports.home = function (req, res) {
-  if (isEmpty(req.session.authUser)) {
+  if (middleware.isEmpty(req.session.authUser)) {
     res.render('main/home', {
       title: "It is title",
       message: "It is message"
@@ -21,7 +15,7 @@ exports.home = function (req, res) {
 exports.registration = function (req, res) {
   if (req.session.authUser) {
     res.redirect('/');
-  } else if (isEmpty(req.session.authUser)) {
+  } else if (middleware.isEmpty(req.session.authUser)) {
     res.render('main/reg', {
       title: "Registration",
       message: "It is registration page",

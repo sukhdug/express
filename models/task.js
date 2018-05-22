@@ -68,35 +68,8 @@ var findAll = function(callback) {
   });
 }
 
-var findAllOfUser = function(userId, callback) {
-  Task.find({
-    author: userId
-  })
-  .populate('author', ['fullName'])
-  .exec(function(err, tasks) {
-    if (err) throw err;
-    console.log(tasks);
-    callback(tasks);
-  });
-}
-
-var findByImportance = function(importance, callback) {
-  Task.find({
-    importance: importance
-  })
-  .populate('author', ['fullName'])
-  .exec(function(err, tasks) {
-    if (err) throw err;
-    console.log(tasks);
-    callback(tasks);
-  });
-}
-
-var findByImportanceOfUser = function(userId, importance, callback) {
-  Task.find({
-    author: userId,
-    importance: importance
-  })
+var findAllByParameters = function(parameters, callback) {
+  Task.find(parameters)
   .populate('author', ['fullName'])
   .exec(function(err, tasks) {
     if (err) throw err;
@@ -125,7 +98,5 @@ module.exports = {
   update: update,
   findTaskById: findTaskById,
   findAll: findAll,
-  findAllOfUser: findAllOfUser,
-  findByImportance: findByImportance,
-  findByImportanceOfUser: findByImportanceOfUser
+  findAllByParameters: findAllByParameters
 }

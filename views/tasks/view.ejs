@@ -11,8 +11,9 @@
         <p><b>Description:</b> <%= task.description %></p>
         <p><b>Importance:</b> <%= task.importance %></p>
         <p><b>Status:</b> <%= task.status %></p>
-        <p><b>Created:</b> <%= task.created %></p>
-        <p><b>Deadline:</b> <%= task.deadline %></p>
+        <p><b>Created:</b> <%= created %></p>
+        <p><b>Deadline:</b> <%= deadline %></p>
+        <p><b>Closed:</b> <%= closed %></p>
         <p><a href="/tasks/update/<%= task._id %>" type="button" class="btn btn-default">Edit</button></a>
           <a href="/tasks/delete/<%= task._id %>" type="button" class="btn btn-danger">Delete</a></p>
       </div>

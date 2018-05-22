@@ -7,7 +7,7 @@ function isEmpty(obj) {
   return true;
 }
 
-exports.home = function (req, res, next) {
+exports.home = function (req, res) {
   if (isEmpty(req.session.authUser)) {
     res.render('main/home', {
       title: "It is title",
@@ -18,16 +18,20 @@ exports.home = function (req, res, next) {
   }
 }
 
-exports.registration = function (req, res, next) {
-  res.render('main/reg', {
-    title: "Registration",
-    message: "It is registration page",
-    fullName: '',
-    email: ''
-  });
+exports.registration = function (req, res) {
+  if (req.session.authUser) {
+    res.redirect('/');
+  } else if (isEmpty(req.session.authUser)) {
+    res.render('main/reg', {
+      title: "Registration",
+      message: "It is registration page",
+      fullName: '',
+      email: ''
+    });
+  }
 }
 
-exports.registrationResult = function (req, res, next) {
+exports.registrationResult = function (req, res) {
   if (req.body.password != req.body.repeatPassword) {
     res.render('main/reg', {
       title: "Registration",
@@ -44,7 +48,9 @@ exports.registrationResult = function (req, res, next) {
     }
     var result = user.create(data);
     if (result === 1) {
-      res.redirect('/');
+      res.send('You successfully registered.<br>' +
+        'Please, <a href="/auth">login</a> with data:<br>' +
+        'email: ' + data.email + '<br>' + 'password: ' + data.password);
     } else {
       res.render('main/reg', {
         title: "Registration",
@@ -54,12 +60,9 @@ exports.registrationResult = function (req, res, next) {
       });
     }
   }
-  if (req.body) {
-    console.log(req.body);
-  }
 }
 
-exports.auth = function (req, res, next) {
+exports.auth = function (req, res) {
   res.render('main/auth', {
     title: "Authorization",
     message: "It is authorization page",
@@ -67,7 +70,7 @@ exports.auth = function (req, res, next) {
   });
 }
 
-exports.authResult = function (req, res, next) {
+exports.authResult = function (req, res) {
   if (req.body) {
     var data = {
       email: req.body.email,
@@ -84,14 +87,13 @@ exports.authResult = function (req, res, next) {
         console.log(user);
         req.session.authUser = user;
         console.log(req.session.authUser);
-        res.send('You authorized<br><a href="/">Main page</a>');
+        res.send('You authorized<br><a href="/">Back to homepage</a>');
       }
     });
-    console.log(req.body);
   }
 }
 
-exports.logout = function (req, res, next) {
+exports.logout = function (req, res) {
   req.session.destroy();
   res.redirect('/');
 }

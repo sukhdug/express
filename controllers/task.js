@@ -12,47 +12,42 @@ exports.index = function(req, res, next) {
   if (isEmpty(req.session.authUser)) {
     res.redirect('/');
   } else if (req.session.authUser) {
-    if (req.session.authUser.role === 'user') {
-      if (isEmpty(req.query)) {
-        var userId = req.session.authUser._id;
-        task.findAllOfUser(userId, function (tasks) {
-          res.render('tasks/index', {
-            title: "All tasks",
-            message: "Here shown all tasks",
-            tasks: tasks
-          });
-        });
-      } else if (req.query) {
-        var importance = req.query.importance;
-        var userId = req.session.authUser._id;
-        task.findByImportanceOfUser(userId, importance, function (tasks) {
-          res.render('tasks/index', {
-            title: "All tasks",
-            message: "Here shown all tasks",
-            tasks: tasks
-          });
-        });
+    var permission = req.session.authUser.role;
+    if (isEmpty(req.query)) {
+      if (permission === 'user') {
+        var data = {
+          author: req.session.authUser._id
+        }
+        getTasksByParameters(data);
       }
+      if (permission === 'admin') {
+        getTasksByParameters({});
+      }
+    } else if (req.query) {
+      var data = {};
+      if (req.session.authUser.role == 'user') {
+        data.author = req.session.authUser._id;
+      }
+      if (req.query.importance == 'all' && req.query.status != 'all') {
+        data.status = req.query.status;
+      }
+      if (req.query.status == 'all' && req.query.importance != 'all') {
+        data.importance = req.query.importance;
+      }
+      if (req.query.status != 'all' && req.query.importance != 'all') {
+        data.importance = req.query.importance;
+        data.status = req.query.status;
+      }
+      getTasksByParameters(data);
     }
-    if (req.session.authUser.role === 'admin') {
-      if (isEmpty(req.query)) {
-        task.findAll( function (tasks) {
-          res.render('tasks/index', {
-            title: "All tasks",
-            message: "Here shown all tasks",
-            tasks: tasks
-          });
+    function getTasksByParameters (data) {
+      task.findAllByParameters(data, function (tasks) {
+        res.render('tasks/index', {
+          title: "All tasks",
+          message: "Here shown all tasks",
+          tasks: tasks
         });
-      } else if (req.query) {
-        var importance = req.query.importance;
-        task.findByImportance(importance, function (tasks) {
-          res.render('tasks/index', {
-            title: "All tasks",
-            message: "Here shown all tasks",
-            tasks: tasks
-          });
-        });
-      }
+      });
     }
   }
 }
@@ -70,7 +65,13 @@ exports.view = function(req, res, next) {
         res.render('tasks/view', {
           title: "Full information of task",
           task: task,
-          author: task.author
+          author: task.author,
+          created: task.created.getDate() + '-' + (task.created.getMonth() + 1)
+          + '-' + task.created.getFullYear(),
+          deadline: task.deadline != null ? task.deadline.getDate() + '-' +
+          (task.deadline.getMonth() + 1) + '-' + task.deadline.getFullYear() : 'no',
+          closed: task.status == 'closed' ? task.deadline.getDate() +
+          '-' + (task.deadline.getMonth() + 1) + '-' + task.deadline.getFullYear() : 'no'
         });
       } else {
         res.send('403! You don\'t have permission<br><a href="/tasks">' +

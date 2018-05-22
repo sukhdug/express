@@ -13,9 +13,10 @@ var create = function(data) {
       password: password,
       role: data.admin ? "admin" : "user"
     });
-    user.save(function(err) {
+    user.save(function(err, user) {
       if (err) throw err;
       console.log('user successfully saved.');
+      console.log(user);
     });
   } else {
     return errors;

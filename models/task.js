@@ -20,27 +20,24 @@ var create = function(data, callback) {
   });
 }
 
-var update = function(data) {
-  var errors = validation(data);
-  if (errors === 0) {
-    var data = {
-      _id: data._id,
-      name: data.name,
-      description: data.description,
-      importance: data.importance,
-      deadline: data.deadline,
-      status: data.closed ? "closed" : "open",
-      closed: data.closed ? new Date() : null
-    }
-    console.log(data._id);
-    Task.update({ _id: data._id }, data, function(err, task) {
-      if (err) throw err;
-      console.log(task);
-    });
-  } else {
-    return errors;
+var update = function(data, callback) {
+  var data = {
+    _id: data._id,
+    name: data.name,
+    description: data.description,
+    importance: data.importance,
+    deadline: data.deadline,
+    status: data.closed ? "closed" : "open",
+    closed: data.closed ? new Date() : null
   }
-  return 1;
+  console.log(data._id);
+  Task.update({ _id: data._id }, data, function(err, task) {
+    if (err) {
+      callback(new Error("Server error"));
+    }
+    console.log('task successfully updated');
+    callback(null, task);
+  });
 }
 
 var remove = function(id, callback) {

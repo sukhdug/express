@@ -159,12 +159,18 @@ exports.updatePost = function(req, res) {
       deadline: req.body.deadline,
       closed: req.body.closed ? true : false
     }
-    var result = task.update(data);
-    if (result === 1) {
-      req.flash('success', 'Info of the task updated');
-      res.redirect(301, '/tasks/view/' + id);
+    var errors = task.validation(data);
+    if (errors == 0) {
+      task.update(data, function(err, task) {
+        if (err) {
+          res.send("500 Server error<br><a href='/tasks'>Back to tasks list</a>");
+        } else {
+          req.flash('success', 'Task successfully created');
+          res.redirect(301, '/tasks/view/' + id);
+        }
+      });
     } else {
-      req.flash('error', result);
+      req.flash('error', errors);
       res.render('tasks/update', {
         title: "Update of task",
         flashError: req.flash('error'),

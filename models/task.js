@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Task = require('../entities/task');
+var User = require('../entities/user');
 
 var create = function(data, callback) {
   var task = new Task({

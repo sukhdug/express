@@ -3,7 +3,7 @@ var task = require('../models/task');
 
 var dataSuccess = {
   name: "Test",
-  author: { _id: "5b0446ca0ed792135ab7d640", fullName: "test" },
+  author: { _id: "5b0444fd26268b11ecf5faae", fullName: "test" },
   description: "Test description",
   importance: "normal",
   status: "open",
@@ -11,8 +11,8 @@ var dataSuccess = {
 }
 
 var _id = 0;
-describe('Task', function(){
-  describe('#validation', function(){
+describe('Task', function() {
+  describe('#validation', function() {
     it('should be return 0', function() {
       assert.equal(task.validation(dataSuccess), 0);
       assert.typeOf(task.validation(dataSuccess), "number");
@@ -49,6 +49,29 @@ describe('Task', function(){
         if (err) done(err);
         else done();
         _id = task._id;
+      });
+    });
+  });
+  describe('#findTaskById', function() {
+    it('should find task without error', function(done) {
+      task.findTaskById(_id, function(task) {
+        done();
+      });
+    });
+  });
+  describe('#findAllByParameters', function() {
+    it('should find tasks without error', function(done) {
+      task.findAllByParameters({}, 0, function(tasks, pages) {
+        done();
+      });
+    });
+    it('should find tasks without error', function(done) {
+      var data = {
+        status: 'open',
+        importance: 'normal'
+      }
+      task.findAllByParameters(data, 0, function(tasks, pages) {
+        done();
       });
     });
   });

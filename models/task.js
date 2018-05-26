@@ -54,10 +54,8 @@ var findTaskById = function(id, callback) {
   })
   .populate('author', ['fullName'])
   .exec(function(err, task) {
-    if (err) throw err;
-    console.log(task);
-    if (task == null) {
-      callback(null);
+    if (err) {
+      callback(new Error("Server error: task not found or server is bad"));
     } else {
       var data = {
         _id: task._id,
@@ -74,7 +72,7 @@ var findTaskById = function(id, callback) {
         closed: task.status == 'closed' ? task.closed.getFullYear() + '-' +
         task.closed.getMonth() + '.' + task.closed.getDate() : 'no',
       }
-      callback(data);
+      callback(null, data);
     }
   });
 }
@@ -86,29 +84,35 @@ var findAllByParameters = function(parameters, page, callback) {
   .skip(10 * page)
   .sort([['created', -1]])
   .exec(function(err, tasks) {
-    if (err) throw err;
-    console.log(tasks);
-    var data = [];
-    for (let i = 0; i < tasks.length; i++) {
-      data[i] = {
-        _id: tasks[i]._id,
-        name: tasks[i].name,
-        description: tasks[i].description,
-        author: tasks[i].author.fullName,
-        importance: tasks[i].importance,
-        status: tasks[i].status,
-        created: tasks[i].created.getFullYear() + '-' + tasks[i].created.getMonth() +
-          '-' + tasks[i].created.getDate(),
-        deadline: tasks[i].deadline != null ? tasks[i].deadline.getFullYear() +
-          '-' + tasks[i].deadline.getMonth() + '-' + tasks[i].deadline.getDate() : 'no',
-        closed: tasks[i].status == 'closed' ? tasks[i].closed.getFullYear() +
-          '-' + tasks[i].closed.getMonth() + '-' + tasks[i].closed.getDate() : 'no',
+    if (err) {
+      callback(new Error("Server error: tasks not found or server is bad"));
+    } else {
+      var data = [];
+      for (let i = 0; i < tasks.length; i++) {
+        data[i] = {
+          _id: tasks[i]._id,
+          name: tasks[i].name,
+          description: tasks[i].description,
+          author: tasks[i].author.fullName,
+          importance: tasks[i].importance,
+          status: tasks[i].status,
+          created: tasks[i].created.getFullYear() + '-' + tasks[i].created.getMonth() +
+            '-' + tasks[i].created.getDate(),
+          deadline: tasks[i].deadline != null ? tasks[i].deadline.getFullYear() +
+            '-' + tasks[i].deadline.getMonth() + '-' + tasks[i].deadline.getDate() : 'no',
+          closed: tasks[i].status == 'closed' ? tasks[i].closed.getFullYear() +
+            '-' + tasks[i].closed.getMonth() + '-' + tasks[i].closed.getDate() : 'no',
+        }
       }
+      Task.count().exec(function(err, count) {
+        if (err) {
+          callback(null, data, null);
+        } else {
+          var pages = count / 10;
+          callback(null, data, pages);
+        }
+      });
     }
-    Task.count().exec(function(err, count) {
-      var pages = count / 10;
-      callback(data, pages);
-    });
   });
 }
 

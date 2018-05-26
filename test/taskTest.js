@@ -54,7 +54,8 @@ describe('Task', function() {
   });
   describe('#findTaskById', function() {
     it('should find task without error', function(done) {
-      task.findTaskById(_id, function(task) {
+      task.findTaskById(_id, function(err, task) {
+        if (err) done(err);
         done();
       });
     });

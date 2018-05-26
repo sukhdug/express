@@ -37,20 +37,23 @@ exports.index = function(req, res) {
     getTasksByParameters(data, page);
   }
   function getTasksByParameters (data, page) {
-    task.findAllByParameters(data, page, function (tasks, pages) {
-      res.render('tasks/index', {
-        title: "Tasks",
-        flashSuccess: req.flash('success'),
-        tasks: tasks
-      });
+    task.findAllByParameters(data, page, function (err, tasks, pages) {
+      if (err) {
+      } else {
+        res.render('tasks/index', {
+          title: "Tasks",
+          flashSuccess: req.flash('success'),
+          tasks: tasks
+        });
+      }
     });
   }
 }
 
 exports.view = function(req, res) {
   var id = req.params.id;
-  task.findTaskById(id, function (task) {
-    if (task == null) {
+  task.findTaskById(id, function (err, task) {
+    if (err) {
       res.send('404! Sorry, task not found or deleted!<br>' +
         '<a href="/tasks">Back to tasks list</a>');
     } else {
@@ -121,8 +124,8 @@ exports.createPost = function(req, res) {
 
 exports.updateGet = function(req, res) {
   var id = req.params.id;
-  task.findTaskById(id, function (task) {
-    if (task == null) {
+  task.findTaskById(id, function (err, task) {
+    if (err) {
       res.send('404! Sorry, task not found or deleted!<br>' +
         '<a href="/tasks">Back to tasks list</a>');
     } else {
@@ -186,8 +189,8 @@ exports.updatePost = function(req, res) {
 
 exports.deleteGet = function(req, res) {
   var id = req.params.id;
-  task.findTaskById(id, function (task) {
-    if (task == null) {
+  task.findTaskById(id, function (err, task) {
+    if (err) {
       res.send('404! Sorry, task not found or deleted!<br>' +
         '<a href="/tasks">Back to tasks list</a>');
     } else {

@@ -15,9 +15,10 @@ var create = function(data, callback) {
   task.save(function(err, task) {
     if (err) {
       callback(new Error("Server error"));
+    } else {
+      console.log('task successfully saved.');
+      callback(null, task);
     }
-    console.log('task successfully saved.');
-    callback(null, task);
   });
 }
 

@@ -10,6 +10,9 @@ var dataSuccess = {
 }
 
 var _id = 0;
+/*
+  Test model
+*/
 describe('User', function() {
   describe('#validation', function() {
     it('should be return 0', function() {
@@ -20,6 +23,32 @@ describe('User', function() {
       let dataEmptyFullName = { fullName: "" }
       assert.equal(user.validation(dataEmptyFullName), "Please, input your full name!");
       assert.typeOf(user.validation(dataEmptyFullName), "string");
+    });
+  });
+  describe('#create', function() {
+    it('should save without error', function(done) {
+      user.create(dataSuccess, function(err, user) {
+        if (err) done(err);
+        else done();
+        _id = user._id;
+      });
+    });
+  });
+  describe('#findByEmailAndPassword', function() {
+    it('should get user without error', function(done) {
+      var data = { email: "test@mail.com", password: "password"}
+      user.findByEmailAndPassword(data, function(err, user) {
+        if (err) done(err);
+        else done();
+      });
+    });
+  });
+  describe('#remove', function() {
+    it('should remove without error', function(done) {
+      user.remove(_id, function(err, result) {
+        if (err) done(err);
+        else done();
+      });
     });
   });
 });

@@ -14,9 +14,20 @@ var create = function(data, callback) {
   user.save(function(err, user) {
     if (err) {
       callback(new Error("Server error"));
+    } else {
+      console.log('user successfully saved.');
+      callback(null, user);
     }
-    console.log('user successfully saved.');
-    callback(null, user);
+  });
+}
+
+var remove = function(id, callback) {
+  User.findOneAndRemove({_id: id}, function (err) {
+    if (err) {
+      callback(new Error("Remove error"));
+    } else {
+      callback(null, 'User deleted');
+    }
   });
 }
 
@@ -27,20 +38,19 @@ var findByEmailAndPassword = function(data, callback) {
       password: password
   }).exec(function(err, user) {
     if (err) {
-      throw err;
       callback(new Error("Server error"));
-    }
-    console.log(user);
-    if (user !== null) {
-      var data = {
-        _id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        role: user.role
-      }
-      callback(null, data);
     } else {
-      callback(new Error("User not found"));
+      if (user !== null) {
+        var data = {
+          _id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role
+        }
+        callback(null, data);
+      } else {
+        callback(new Error("User not found"));
+      }
     }
   });
 }
@@ -73,6 +83,7 @@ var validation = function (data) {
 
 module.exports = {
   create: create,
+  remove: remove,
   findByEmailAndPassword: findByEmailAndPassword,
   validation: validation
 };

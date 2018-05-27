@@ -23,7 +23,13 @@ npm start
 ```
 Дамп БД находится в директории _dump/express
 
-Конфиг к БД находится в файле /config/database.js
+Конфиг к БД находится в файле /config/database.js.
+
+Для запуска тестов введите в командной строке следующую команду
+
+```shell
+npm run test
+```
 
 ## Недостатки ##
 * ES5
@@ -35,6 +41,7 @@ npm start
 
 ## Использованные библиотеки ##
 * [Express](https://github.com/expressjs/express)
-* [Mongoose](https://github.com/Automattic/mongoose)
 * [Body-parser](https://github.com/expressjs/body-parser)
+* [Mongoose](https://github.com/Automattic/mongoose)
 * [Morgan](https://github.com/expressjs/morgan)
+* [Mocha](https://github.com/mochajs/mocha) и [Chai](https://github.com/chaijs/chai)

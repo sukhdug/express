@@ -1,5 +1,10 @@
-var assert = require('chai').assert;
 var task = require('../models/task');
+let chai = require('chai');
+let chaiHttp = require('chai-http');
+let server = require('../app');
+var assert = chai.assert;
+let should = chai.should();
+chai.use(chaiHttp);
 
 var dataSuccess = {
   name: "Test",
@@ -11,6 +16,9 @@ var dataSuccess = {
 }
 
 var _id = 0;
+/*
+  Test model
+*/
 describe('Task', function() {
   describe('#validation', function() {
     it('should be return 0', function() {
@@ -90,6 +98,19 @@ describe('Task', function() {
       task.remove(_id, function(result) {
         done();
       });
+    });
+  });
+});
+/*
+  Test controller
+*/
+describe('/GET tasks', function() {
+  it('should GET all the tasks', (done) => {
+    chai.request(server)
+    .get('/tasks')
+    .end((err, res) => {
+      res.should.have.status(200);
+      done();
     });
   });
 });

@@ -17,7 +17,7 @@ exports.registrationGet = function (req, res) {
     res.redirect('/');
   } else if (middleware.isEmpty(req.session.authUser)) {
     res.render('main/reg', {
-      title: "Registration",
+      title: "Sign Up",
       flashError: req.flash('error'),
       fullName: '',
       email: ''
@@ -43,7 +43,7 @@ exports.registrationPost = function (req, res) {
   } else {
     req.flash('error', errors);
     res.render('main/reg', {
-      title: "Registration",
+      title: "Sign Up",
       flashError: req.flash('error'),
       fullName: req.body.fullName,
       email: req.body.email
@@ -53,8 +53,8 @@ exports.registrationPost = function (req, res) {
 
 exports.authGet = function (req, res) {
   res.render('main/auth', {
-    title: "Authorization",
-    message: "It is authorization page",
+    title: "Sign In",
+    flashError: req.flash('error'),
     email: ''
   });
 }
@@ -67,9 +67,10 @@ exports.authPost = function (req, res) {
     }
     user.findByEmailAndPassword(data, function (err, user) {
       if (err) {
+        req.flash('error', "Error! Maybe, email or password is wrong");
         res.render('main/auth', {
-          title: "Authorization",
-          message: "Error! Maybe, email or password is wrong",
+          title: "Sign In",
+          flashError: req.flash('error'),
           email: req.body.email
         });
       } else {

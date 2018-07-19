@@ -43,7 +43,9 @@ exports.index = function(req, res) {
         res.render('tasks/index', {
           title: "Tasks",
           flashSuccess: req.flash('success'),
-          tasks: tasks
+          tasks: tasks,
+          chooseStatus: req.query.status,
+          chooseImportance: req.query.importance
         });
       }
     });

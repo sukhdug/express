@@ -19,9 +19,9 @@
           <div class="form-group">
             <label for="importance">Select importance of task</label>
             <select class="form-control" name="importance">
-              <option value="normal">обычная</option>
-              <option value="important">важная</option>
-              <option value="very_important">очень важная</option>
+              <option value="normal" <% if (importance == 'normal') { %> selected <% } %>>обычная</option>
+              <option value="important" <% if (importance == 'important') { %> selected <% } %>>важная</option>
+              <option value="very_important" <% if (importance == 'very_important') { %> selected <% } %>>очень важная</option>
             </select>
           </div>
           <div class="form-group">

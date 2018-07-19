@@ -12,17 +12,17 @@
             <label for="importance">Importance</label>
             <select class="form-control" name="importance">
               <option value="all">all</option>
-              <option value="normal">normal</option>
-              <option value="important">important</option>
-              <option value="very_important">very important</option>
+              <option value="normal" <% if (chooseImportance == 'normal') { %> selected <% } %>>normal</option>
+              <option value="important" <% if (chooseImportance == 'important') { %> selected <% } %>>important</option>
+              <option value="very_important" <% if (chooseImportance == 'very_important') { %> selected <% } %>>very important</option>
             </select>
           </div>
           <div class="form-group">
             <label for="importance">Status</label>
             <select class="form-control" name="status">
               <option value="all">all</option>
-              <option value="open">open</option>
-              <option value="closed">closed</option>
+              <option value="open" <% if (chooseStatus == 'open') { %> selected <% } %>>open</option>
+              <option value="closed" <% if (chooseStatus == 'closed') { %> selected <% } %>>closed</option>
             </select>
           </div>
           <button type="submit" class="btn btn-primary">Apply</button>

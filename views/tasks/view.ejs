@@ -1,29 +1,30 @@
 <% include ../layout %>
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1><%= title %></h1>
-        <% if (flashSuccess.length > 0) { %>
-          <div class="alert alert-primary" role="alert"><%= flashSuccess %></div>
-        <% } %>
-        <hr>
-        <h2><%= task.name %></h2>
-        <p><b>Author:</b> <%= task.author %></p>
-        <p><b>Description:</b> <%= task.description %></p>
-        <p><b>Importance:</b> <%= task.importance %></p>
-        <p><b>Status:</b> <%= task.status %></p>
-        <p><b>Created:</b> <%= task.created %></p>
-        <p><b>Deadline:</b> <%= task.deadline %></p>
-        <% if (task.status == 'closed') { %>
-          <p><b>Closed:</b> <%= task.closed %></p>
-        <% } %>
-        <p><a href="/tasks" type="button" class="btn btn-primary">List</button></a>
-          <a href="/tasks/update/<%= task._id %>" type="button" class="btn btn-default">Edit</a>
-          <a href="/tasks/delete/<%= task._id %>" type="button" class="btn btn-default">Delete</a>
-        </p>
-      </div>
-    </div>
-  </div>
-</body>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1><%= title %></h1>
+                    <% if (flashSuccess.length > 0) { %>
+                      <div class="alert alert-primary" role="alert"><%= flashSuccess %></div>
+                    <% } %>
+                    <hr>
+                    <h2><%= task.name %></h2>
+                    <p><b>Author:</b> <%= task.author %></p>
+                    <p><b>Description:</b> <%= task.description %></p>
+                    <p><b>Importance:</b> <%= task.importance %></p>
+                    <p><b>Status:</b> <%= task.status %></p>
+                    <p><b>Created:</b> <%= task.created %></p>
+                    <p><b>Deadline:</b> <%= task.deadline %></p>
+                    <% if (task.status == 'closed') { %>
+                        <p><b>Closed:</b> <%= task.closed %></p>
+                    <% } %>
+                    <p>
+                        <a href="/tasks" type="button" class="btn btn-primary">List</button></a>
+                        <a href="/tasks/update/<%= task._id %>" type="button" class="btn btn-default">Edit</a>
+                        <a href="/tasks/delete/<%= task._id %>" type="button" class="btn btn-default">Delete</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

@@ -1,38 +1,38 @@
 <% include ../layout %>
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1><%= title %></h1>
-        <% if (flashError.length > 0) { %>
-          <div class="alert alert-danger" role="alert"><%= flashError %></div>
-        <% } %>
-        <form method="POST" action="/tasks/create">
-          <div class="form-group">
-            <label for="name">Input task name</label>
-            <input type="text" name="name" class="form-control" value="<%= name %>" placeholder="Enter task name">
-          </div>
-          <div class="form-group">
-            <label for="description">Input task description</label>
-            <textarea class="form-control" rows="4" name="description"><%= description %></textarea>
-          </div>
-          <div class="form-group">
-            <label for="importance">Select importance of task</label>
-            <select class="form-control" name="importance">
-              <option value="normal" <% if (importance == 'normal') { %> selected <% } %>>обычная</option>
-              <option value="important" <% if (importance == 'important') { %> selected <% } %>>важная</option>
-              <option value="very_important" <% if (importance == 'very_important') { %> selected <% } %>>очень важная</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="deadline">Select deadline</label>
-            <input type="date" class="form-control" name="deadline" value="<%= deadline %>" placeholder="Date">
-          </div>
-          <button type="submit" name="submit" class="btn btn-primary">Send</button>
-          <a href="/" class="btn btn-default" type="button">Task list</a>
-        </form>
-      </div>
-    </div>
-  </div>
-</body>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1><%= title %></h1>
+                    <% if (flashError.length > 0) { %>
+                        <div class="alert alert-danger" role="alert"><%= flashError %></div>
+                    <% } %>
+                    <form method="POST" action="/tasks/create">
+                        <div class="form-group">
+                            <label for="name">Input task name</label>
+                            <input type="text" name="name" class="form-control" value="<%= name %>" placeholder="Enter task name">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Input task description</label>
+                            <textarea class="form-control" rows="4" name="description"><%= description %></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="importance">Select importance of task</label>
+                            <select class="form-control" name="importance">
+                                <option value="normal" <% if (importance == 'normal') { %> selected <% } %>>обычная</option>
+                                <option value="important" <% if (importance == 'important') { %> selected <% } %>>важная</option>
+                                <option value="very_important" <% if (importance == 'very_important') { %> selected <% } %>>очень важная</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deadline">Select deadline</label>
+                            <input type="date" class="form-control" name="deadline" value="<%= deadline %>" placeholder="Date">
+                        </div>
+                        <button type="submit" name="submit" class="btn btn-primary">Send</button>
+                        <a href="/" class="btn btn-default" type="button">Task list</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

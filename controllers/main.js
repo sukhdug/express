@@ -3,10 +3,7 @@ var middleware = require('../config/middleware');
 
 exports.index = function (req, res) {
   if (middleware.isEmpty(req.session.authUser)) {
-    res.render('main/index', {
-      title: "It is title",
-      message: "It is message"
-    });
+    res.redirect('/auth');
   } else if (req.session.authUser) {
     res.redirect('/tasks');
   }

@@ -1,52 +1,61 @@
 <% include ../layout %>
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1><%= title %></h1>
-        <% if (flashSuccess.length > 0) { %>
-          <div class="alert alert-info" role="alert"><%= flashSuccess %></div>
-        <% } %>
-        <form method="GET" action="/tasks">
-          <div class="form-group">
-            <label for="importance">Importance</label>
-            <select class="form-control" name="importance">
-              <option value="all">all</option>
-              <option value="normal" <% if (chooseImportance == 'normal') { %> selected <% } %>>normal</option>
-              <option value="important" <% if (chooseImportance == 'important') { %> selected <% } %>>important</option>
-              <option value="very_important" <% if (chooseImportance == 'very_important') { %> selected <% } %>>very important</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="importance">Status</label>
-            <select class="form-control" name="status">
-              <option value="all">all</option>
-              <option value="open" <% if (chooseStatus == 'open') { %> selected <% } %>>open</option>
-              <option value="closed" <% if (chooseStatus == 'closed') { %> selected <% } %>>closed</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-primary">Apply</button>
-          <a href="/tasks/create"><button type="button" class="btn btn-default">Create task</button></a>
-        </form>
-        <hr>
-        <% for (var i=0; i < tasks.length; i++) { %>
-          <h1><a href="/tasks/view/<%= tasks[i]._id %>"><%= tasks[i].name %></a></h1>
-          <p><b>Description</b></p>
-          <p><%= tasks[i].description %></p>
-          <p><b>Author:</b> <%= tasks[i].author %></p>
-          <p><b>Importance:</b> <%= tasks[i].importance %></p>
-          <p><b>Status:</b> <%= tasks[i].status %></p>
-          <p><b>Created:</b> <%= tasks[i].created %></p>
-          <p><b>Deadline:</b> <%= tasks[i].deadline %></p>
-          <% if (tasks[i].status == 'closed') { %>
-            <p><b>Closed:</b> <%= tasks[i].closed %></p>
-          <% } %>
-        <% } %>
-        <% if (tasks.length == 0) { %>
-          <p>You have no tasks. <a href="/tasks/create">Create task</a></p>
-        <% } %>
-      </div>
-    </div>
-  </div>
-</body>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6">
+                    <h1><%= title %></h1>
+                    <% if (flashSuccess.length > 0) { %>
+                        <div class="alert alert-info" role="alert"><%= flashSuccess %></div>
+                    <% } %>
+                    <hr>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6">
+                    <form method="GET" action="/tasks">
+                        <div class="form-group">
+                            <label for="importance">Importance</label>
+                            <select class="form-control" name="importance">
+                                <option value="all">all</option>
+                                <option value="normal" <% if (chooseImportance == 'normal') { %> selected <% } %>>normal</option>
+                                <option value="important" <% if (chooseImportance == 'important') { %> selected <% } %>>important</option>
+                                <option value="very_important" <% if (chooseImportance == 'very_important') { %> selected <% } %>>very important</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="importance">Status</label>
+                            <select class="form-control" name="status">
+                                <option value="all">all</option>
+                                <option value="open" <% if (chooseStatus == 'open') { %> selected <% } %>>open</option>
+                                <option value="closed" <% if (chooseStatus == 'closed') { %> selected <% } %>>closed</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                        <a href="/tasks/create"><button type="button" class="btn btn-default">Create task</button></a>
+                    </form>
+                    <hr>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6">
+                    <% for (var i=0; i < tasks.length; i++) { %>
+                        <h1><a href="/tasks/view/<%= tasks[i]._id %>"><%= tasks[i].name %></a></h1>
+                        <p><b>Description</b></p>
+                        <p><%= tasks[i].description %></p>
+                        <p><b>Author:</b> <%= tasks[i].author %></p>
+                        <p><b>Importance:</b> <%= tasks[i].importance %></p>
+                        <p><b>Status:</b> <%= tasks[i].status %></p>
+                        <p><b>Created:</b> <%= tasks[i].created %></p>
+                        <p><b>Deadline:</b> <%= tasks[i].deadline %></p>
+                        <% if (tasks[i].status == 'closed') { %>
+                            <p><b>Closed:</b> <%= tasks[i].closed %></p>
+                        <% } %>
+                    <% } %>
+                    <% if (tasks.length == 0) { %>
+                      <p>You have no tasks. <a href="/tasks/create">Create task</a></p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

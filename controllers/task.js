@@ -65,7 +65,7 @@ exports.view = function(req, res) {
       if (userPermission || adminPermission) {
         res.render('tasks/view', {
           flashSuccess: req.flash('success'),
-          title: "Full information of task",
+          title: task.name,
           task: task
         });
       } else {
